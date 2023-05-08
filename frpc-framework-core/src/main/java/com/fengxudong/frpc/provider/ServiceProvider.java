@@ -1,6 +1,9 @@
 package com.fengxudong.frpc.provider;
 
+import com.fengxudong.frpc.config.FRpcServiceConfig;
 import com.fengxudong.frpc.spi.FRpcSPI;
+
+import java.net.InetSocketAddress;
 
 /**
  * @author feng xud
@@ -8,7 +11,8 @@ import com.fengxudong.frpc.spi.FRpcSPI;
 @FRpcSPI
 public interface ServiceProvider {
 
-    void pulishService();
+    void publishService(FRpcServiceConfig fRpcServiceConfig);
 
-    Object getService();
+
+    Object getService(String fRpcServiceName);
 }

@@ -5,7 +5,7 @@ import com.fengxudong.frpc.annotation.FRpcService;
 /**
  * @author feng xud
  */
-@FRpcService
+@FRpcService(group = "test",version = "1.0")
 public class TestFrpcServiceImpl implements TestFrpcService{
     @Override
     public void sout() {

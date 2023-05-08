@@ -28,6 +28,7 @@
         <protostuff.version>1.7.2</protostuff.version>
         <!--hessian-->
         <hessian.version>4.0.65</hessian.version>
+        <cglib.version>3.3.0</cglib.version>
 
     </properties>
     <modules>

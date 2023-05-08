@@ -6,6 +6,7 @@ package com.fengxudong.frpc.spi;
 public enum ServiceNameEnum {
 
     SERVICE_PROVIDER("ServiceProvider"),
+    TRANSPORT("FRpcTransport"),
     LOADBALANCE("loadBalance");
     private final String name;
 
