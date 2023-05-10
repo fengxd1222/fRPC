@@ -41,8 +41,8 @@ public class ZkServiceProvider implements ServiceProvider {
             fRpcServiceMap.put(fRpcServiceConfig.getRpcServiceName(),fRpcServiceConfig.getService());
         }
         try {
-            String servicePath = FRpcConstant.ZkConfig.ZK_ROOT_PATH + "/" + fRpcServiceConfig.getRpcServiceName()  +new InetSocketAddress(InetAddress.getLocalHost().getHostAddress(), FRpcNettyServer.SERVER_PORT).toString();
-            ZkSupport.registryService(servicePath);
+            String servicePath = FRpcConstant.ZkConfig.ZK_ROOT_PATH + "/" + fRpcServiceConfig.getRpcServiceName();
+            ZkSupport.registryService(servicePath,new InetSocketAddress(InetAddress.getLocalHost().getHostAddress(), FRpcNettyServer.SERVER_PORT).toString());
         }catch (Exception e){
             e.printStackTrace();
         }

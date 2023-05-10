@@ -1,10 +1,15 @@
 package com.fengxudong.frpc.remote.netty.server;
 
+import com.fengxudong.frpc.provider.zk.ZkSupport;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.MultithreadEventLoopGroup;
 import lombok.extern.slf4j.Slf4j;
+
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 
 /**
  * @author feng xud
@@ -15,6 +20,7 @@ public class FRpcNettyServer {
 
     public void run(){
         log.info("FRpcNettyServer run");
+        addShutDownHook();
         EventLoopGroupBuilder.Group<MultithreadEventLoopGroup, MultithreadEventLoopGroup> group = new EventLoopGroupBuilder().build();
         MultithreadEventLoopGroup parentGroup = group.getP();
         MultithreadEventLoopGroup childGroup = group.getC();
@@ -42,5 +48,17 @@ public class FRpcNettyServer {
         }
 
 
+    }
+
+    private void addShutDownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(()->{
+            try {
+                String hostAddress = InetAddress.getLocalHost().getHostAddress();
+                ZkSupport.removeNodes(new InetSocketAddress(hostAddress,SERVER_PORT));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }));
     }
 }

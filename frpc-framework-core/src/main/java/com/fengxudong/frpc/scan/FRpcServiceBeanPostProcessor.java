@@ -34,7 +34,9 @@ public class FRpcServiceBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         if(bean.getClass().isAnnotationPresent(FRpcService.class)){
-            log.info("{} is annotated with {}",bean.getClass().getName(),FRpcService.class.getName());
+            if(log.isDebugEnabled()){
+                log.debug("{} is annotated with {}",bean.getClass().getName(),FRpcService.class.getName());
+            }
             FRpcService fRpcService = bean.getClass().getAnnotation(FRpcService.class);
             FRpcServiceConfig fRpcServiceConfig = FRpcServiceConfig.builder()
                     .group(fRpcService.group())

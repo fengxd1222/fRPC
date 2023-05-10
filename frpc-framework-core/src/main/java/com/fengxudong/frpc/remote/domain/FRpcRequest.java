@@ -45,6 +45,6 @@ public class FRpcRequest implements Serializable {
 
 
     public String getRpcServiceName() {
-        return classOrInterfaceName+group+version;
+        return classOrInterfaceName+"/"+group+"/"+version;
     }
 }

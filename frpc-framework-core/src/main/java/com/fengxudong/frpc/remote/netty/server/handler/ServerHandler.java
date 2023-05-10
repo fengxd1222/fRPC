@@ -67,8 +67,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         if (evt instanceof IdleStateEvent) {
             IdleState state = ((IdleStateEvent) evt).state();
             if (state == IdleState.READER_IDLE) {
-                log.info("idle check happen, so close the connection");
-//                ctx.close();
+                log.info("userEventTriggered  IdleStateEvent ...");
+
             }
         } else {
             super.userEventTriggered(ctx, evt);
