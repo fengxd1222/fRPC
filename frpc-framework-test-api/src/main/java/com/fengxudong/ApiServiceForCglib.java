@@ -5,6 +5,6 @@ package com.fengxudong;
  */
 public class ApiServiceForCglib {
     public ApiModel doService(ApiModel apiModel){
-
+        return null;
     }
 }
