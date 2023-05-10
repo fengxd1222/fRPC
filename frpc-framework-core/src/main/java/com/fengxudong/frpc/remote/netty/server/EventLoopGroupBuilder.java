@@ -1,5 +1,10 @@
 package com.fengxudong.frpc.remote.netty.server;
 
+import com.fengxudong.frpc.constant.FRpcConstant;
+import com.fengxudong.frpc.remote.netty.codec.FRpcLengthFieldBasedFrameDecoder;
+import com.fengxudong.frpc.remote.netty.codec.FRpcProtocolEncoder;
+import com.fengxudong.frpc.remote.netty.codec.FrpcProtocolDecoder;
+import com.fengxudong.frpc.remote.netty.server.handler.ServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
@@ -11,9 +16,13 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
+
+import java.util.concurrent.TimeUnit;
 
 
 public class EventLoopGroupBuilder {
@@ -35,10 +44,21 @@ public class EventLoopGroupBuilder {
 
     public static ChannelHandler[] channelHandlers(){
         return new ChannelHandler[]{
-                new LineBasedFrameDecoder(1000,false,true),
-                //todo
-                new LoggingHandler(LogLevel.DEBUG)
+                new LoggingHandler(LogLevel.INFO)
         };
+    }
+
+    public static ChannelHandler[] channelChildHandlers(){
+        return new ChannelHandler[]{
+                new IdleStateHandler(30, 0, 0, TimeUnit.SECONDS),
+                new LengthFieldPrepender(FRpcConstant.LENGTH_FIELD_LENGTH),
+                new FRpcProtocolEncoder(),
+                new FRpcLengthFieldBasedFrameDecoder(
+                        Integer.MAX_VALUE,
+                        FRpcConstant.LENGTH_FIELD_OFFSET,
+                        FRpcConstant.LENGTH_FIELD_LENGTH),
+                new FrpcProtocolDecoder(),
+                new ServerHandler()};
     }
 
     public static void addHandler(ServerBootstrap serverBootstrap){
@@ -63,14 +83,14 @@ public class EventLoopGroupBuilder {
             serverBootstrap.childHandler(new ChannelInitializer<EpollSocketChannel>(){
                 @Override
                 protected void initChannel(EpollSocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(channelHandlers());
+                    ch.pipeline().addLast(channelChildHandlers());
                 }
             });
         }else {
             serverBootstrap.childHandler(new ChannelInitializer<NioSocketChannel>(){
                 @Override
                 protected void initChannel(NioSocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(channelHandlers());
+                    ch.pipeline().addLast(channelChildHandlers());
                 }
             });
         }

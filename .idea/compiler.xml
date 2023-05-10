@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <excludeFromCompile>
+      <directory url="file://$PROJECT_DIR$/frpc-framework-test-api/src/main/resources/archetype-resources" includeSubdirectories="true" />
+    </excludeFromCompile>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
@@ -9,8 +12,18 @@
         <outputRelativeToContentRoot value="true" />
         <module name="frpc-framework-core" />
         <module name="frpc-framework-test-client" />
+        <module name="frpc-framework-test-server" />
+        <module name="frpc-framework-test-api" />
         <module name="frpc-framework-common" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="frpc-framework-boot-test-server" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="frpc-framework-boot-test-server" options="-parameters" />
+    </option>
   </component>
 </project>

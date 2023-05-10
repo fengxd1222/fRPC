@@ -16,6 +16,6 @@ public class App
         TestFrpcService bean = applicationContext.getBean(TestFrpcService.class);
         bean.sout();
 
-        Thread.sleep(30 * 1000);
+        Thread.sleep(3 * 1000);
     }
 }

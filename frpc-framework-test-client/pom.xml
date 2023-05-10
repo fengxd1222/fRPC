@@ -23,5 +23,10 @@
             <artifactId>frpc-framework-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.fengxudong</groupId>
+            <artifactId>frpc-framework-test-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

@@ -43,10 +43,13 @@ public class FRpcLoader<T> {
             for (Resource resource : resources) {
                 String className = factory.getMetadataReader(resource).getClassMetadata().getClassName();
                 Class<?> aClass = org.apache.commons.lang3.ClassUtils.getClass(className);
-                if (aClass.isInterface() && aClass.isAnnotationPresent(FRpcSPI.class) && serviceNames.contains(aClass.getSimpleName())) {
-                    ServiceLoader<?> serviceLoader = ServiceLoader.load(aClass);
-                    servicesMap.put(aClass.getSimpleName(), serviceLoader.iterator().next());
+                if(aClass.isAnnotationPresent(FRpcSPI.class)){
+                    if (aClass.isInterface() && aClass.isAnnotationPresent(FRpcSPI.class) && serviceNames.contains(aClass.getSimpleName())) {
+                        ServiceLoader<?> serviceLoader = ServiceLoader.load(aClass);
+                        servicesMap.put(aClass.getSimpleName(), serviceLoader.iterator().next());
+                    }
                 }
+
             }
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -70,10 +73,34 @@ public class FRpcLoader<T> {
             if(!serviceNames.contains(type.getSimpleName())){
                 throw new IllegalArgumentException("The name of the parameter 'type' should belong to the property defined in the enum class.");
             }
-            fRpcLoader = new FRpcLoader<>(type,servicesMap.get(type.getSimpleName()));
+            Object service = servicesMap.get(type.getSimpleName());
+            if(service==null){
+                loadClass(type);
+            }
+            service = servicesMap.get(type.getSimpleName());
+            fRpcLoader = new FRpcLoader<>(type, service);
             serviceLoaders.put(type, fRpcLoader);
         }
         return fRpcLoader;
+    }
+
+    private static <M> void loadClass(Class<M> type) {
+        try {
+            PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+            Resource[] resources = resolver.getResources(ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + ClassUtils.convertClassNameToResourcePath(type.getName())+".class");
+            SimpleMetadataReaderFactory factory = new SimpleMetadataReaderFactory(resolver.getClassLoader());
+            for (Resource resource : resources) {
+                String className = factory.getMetadataReader(resource).getClassMetadata().getClassName();
+                Class<?> aClass = org.apache.commons.lang3.ClassUtils.getClass(className);
+                if (aClass.isInterface() && aClass.isAnnotationPresent(FRpcSPI.class) && serviceNames.contains(aClass.getSimpleName())) {
+                    ServiceLoader<?> serviceLoader = ServiceLoader.load(aClass);
+                    servicesMap.put(aClass.getSimpleName(), serviceLoader.iterator().next());
+                }
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public T getTarget(String name) {

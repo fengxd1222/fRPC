@@ -15,8 +15,8 @@ public class ProxyFactory {
 
     public static FRpcProxy createProxy(FRpcTransport fRpcTransport,FRpcProxyConfig fRpcProxyConfig){
         if(fRpcProxyConfig.getInterfaces()==null || fRpcProxyConfig.getInterfaces().length==0){
-            return new JdkDynamicProxy(fRpcTransport,fRpcProxyConfig);
+            return new CglibProxy(fRpcTransport,fRpcProxyConfig);
         }
-        return new CglibProxy(fRpcTransport,fRpcProxyConfig);
+        return new JdkDynamicProxy(fRpcTransport,fRpcProxyConfig);
     }
 }

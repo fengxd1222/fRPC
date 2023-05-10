@@ -35,6 +35,8 @@
         <module>frpc-framework-core</module>
         <module>frpc-framework-common</module>
         <module>frpc-framework-test-client</module>
+        <module>frpc-framework-test-server</module>
+        <module>frpc-framework-test-api</module>
     </modules>
 
     <dependencies>

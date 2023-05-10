@@ -13,7 +13,9 @@ public class ChannelHolder {
 
     private final Map<String, Channel> channelMap;
 
-    public ChannelHolder() {
+    private volatile static ChannelHolder channelHolder = null;
+
+    private ChannelHolder() {
         this.channelMap = new ConcurrentHashMap<>();
     }
 
@@ -31,5 +33,16 @@ public class ChannelHolder {
     public void set(InetSocketAddress inetSocketAddress,Channel channel){
         String channelKey = inetSocketAddress.toString();
         channelMap.put(channelKey,channel);
+    }
+
+    public static ChannelHolder getInstance(){
+        if(channelHolder==null){
+            synchronized (ChannelHolder.class){
+                if(channelHolder==null){
+                    channelHolder = new ChannelHolder();
+                }
+            }
+        }
+        return channelHolder;
     }
 }

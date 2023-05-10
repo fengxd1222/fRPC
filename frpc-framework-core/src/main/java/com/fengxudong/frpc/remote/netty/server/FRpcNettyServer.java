@@ -14,6 +14,7 @@ public class FRpcNettyServer {
     public static final int SERVER_PORT = 8888;
 
     public void run(){
+        log.info("FRpcNettyServer run");
         EventLoopGroupBuilder.Group<MultithreadEventLoopGroup, MultithreadEventLoopGroup> group = new EventLoopGroupBuilder().build();
         MultithreadEventLoopGroup parentGroup = group.getP();
         MultithreadEventLoopGroup childGroup = group.getC();
