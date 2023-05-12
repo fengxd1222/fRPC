@@ -2,6 +2,7 @@ package com.fengxudong.frpc.remote.netty.server.handler;
 
 import com.fengxudong.frpc.constant.FRpcConstant;
 import com.fengxudong.frpc.enums.FRpcResponseEnum;
+import com.fengxudong.frpc.filter.DefaultFilterExecution;
 import com.fengxudong.frpc.provider.ServiceProvider;
 import com.fengxudong.frpc.remote.domain.FRpcMessage;
 import com.fengxudong.frpc.remote.domain.FRpcRequest;
@@ -44,6 +45,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 fRpcMessageForRet.setMessageType(FRpcConstant.MessageType.HEARTBEAT_RESPONSE_TYPE);
             } else {
                 FRpcRequest fRpcRequest = (FRpcRequest) fRpcMessage.getData();
+                //过滤器
+                new DefaultFilterExecution().filter(fRpcRequest);
                 Object service = serviceProvider.getService(fRpcRequest.getRpcServiceName());
                 Object result = invokeTargetMethod(service, fRpcRequest);
                 fRpcMessageForRet.setMessageType(FRpcConstant.MessageType.RESPONSE_TYPE);
