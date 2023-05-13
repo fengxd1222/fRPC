@@ -1,5 +1,6 @@
 package com.fengxudong.frpc.filter.wrapper;
 
+import com.fengxudong.frpc.filter.AbstractRpcFilter;
 import com.fengxudong.frpc.filter.FRpcFilter;
 import com.fengxudong.frpc.util.ClassLoadUtil;
 import com.fengxudong.frpc.wrapper.FRpcWrapper;
@@ -25,7 +26,7 @@ public class FRpcFilterWrapper implements FRpcWrapper<List<FRpcFilter>> {
         if(CollectionUtils.isEmpty(F_RPC_FILTERS)){
             synchronized (FRpcFilterWrapper.class){
                 if(CollectionUtils.isEmpty(F_RPC_FILTERS)){
-                    List<FRpcFilter> fRpcFilters = ClassLoadUtil.loadFromInterfaces(FRpcFilter.class);
+                    List<AbstractRpcFilter> fRpcFilters = ClassLoadUtil.loadFromSuper(AbstractRpcFilter.class);
                     fRpcFilters.sort(Comparator.comparingInt(FRpcFilter::order));
                     F_RPC_FILTERS.addAll(fRpcFilters);
                 }

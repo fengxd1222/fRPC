@@ -4,7 +4,8 @@ import com.fengxudong.frpc.remote.domain.FRpcRequest;
 import com.fengxudong.frpc.remote.domain.FRpcResponse;
 import lombok.*;
 
-import java.util.jar.Attributes;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * rpc上下文，存储当前线程的请求信息
@@ -16,8 +17,11 @@ public class FRpcContext {
     private static final String CONSUMER_KEY="CONSUMER";
     private static final String PROVIDER_KEY="PROVIDER";
 
-    private Attributes mainAttrs;
+    private Map<Object,Object> mainAttrs;
 
+    public FRpcContext() {
+        this.mainAttrs = new HashMap<>();
+    }
 
     public Object get(String key){
         return mainAttrs.get(key);

@@ -1,5 +1,7 @@
 package com.fengxudong.frpc.context;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.jar.Attributes;
 
 /**
@@ -7,10 +9,10 @@ import java.util.jar.Attributes;
  */
 public class FRpcCustomizedContext extends FRpcContext{
 
-    private Attributes customizedAttrs;
+    private Map<Object,Object> customizedAttrs;
 
     public FRpcCustomizedContext() {
-        this.customizedAttrs = new Attributes();
+        this.customizedAttrs = new HashMap<>();
     }
 
     public Object get(String key){
